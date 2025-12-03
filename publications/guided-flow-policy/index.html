@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="Guided flow policy">
+  <meta name="keywords"
+    content="Reinforcement learning, Offline RL, Flow Matching, Diffusion, Behavior cloning, Behavior regularized actor critic, weighted BC">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guided Flow Policy</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+
+<body>
+
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+    <div class="navbar-menu">
+      <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+        <a class="navbar-item" href="https://simple-robotics.github.io">
+          <span class="icon">
+            <i class="fas fa-home"></i>
+          </span>
+        </a>
+
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">
+            More Research
+          </a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://simple-robotics.github.io/publications/simple-contact-solver/">
+              Simple simulator
+            </a>
+            <a class="navbar-item" href="https://inria.hal.science/hal-05179357v1">
+              Sobolev diffusion policy
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">Guided Flow Policy: Learning from High-Value Actions in Offline RL
+            </h1>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="https://www.linkedin.com/in/frankinguimatsia/">Franki Nguimatsia
+                  Tiofack</a><sup>1,*</sup>,</span>
+              <span class="author-block">
+                <a href="https://www.linkedin.com/in/theotime-le-hellard-a3a066249/">Théotime Le
+                  Hellard</a><sup>1,*</sup>,</span>
+              <span class="author-block">
+                <a href="https://fabinsch.github.io/">Fabian Schramm</a><sup>1,2,*</sup>,</span>
+            </div>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="https://www.isir.upmc.fr/personnel/perrin/?lang=en">Nicolas
+                  Perrin-Gilbert</a><sup>2</sup>,</span>
+              <span class="author-block">
+                <a href="https://jcarpent.github.io">Justin Carpentier</a><sup>1</sup></span>
+            </div>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><sup>*</sup>Equal contribution.&emsp;&emsp;<sup>1</sup>Willow, Inria -
+                ENS.&emsp;&emsp;
+                <sup>2</sup></span>ISIR.
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <!-- PDF Link. -->
+                <span class="link-block">
+                  <a href="./static/paper/guided-flow-policy-2025.pdf"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                    </span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="https://github.com/Simple-Robotics/guided-flow-policy"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            Offline reinforcement learning often relies on behavior regularization that enforces policies to remain
+            close to the dataset distribution.
+            However, such approaches fail to distinguish between high-value and low-value actions in their
+            regularization components.
+            We introduce Guided Flow Policy (GFP), which couples a multi-step flow-matching policy with a distilled
+            one-step actor.
+            The actor directs the flow policy through weighted behavior cloning to focus on cloning high-value actions
+            from the dataset rather than indiscriminately imitating all state-action pairs.
+            In turn, the flow policy constrains the actor to remain aligned with the dataset's best transitions while
+            maximizing the critic.
+            This mutual guidance enables GFP to achieve state-of-the-art performance across 144 state and pixel-based
+            tasks from the OGBench, Minari, and D4RL benchmarks, with substantial gains on suboptimal datasets and
+            challenging tasks.
+          </div>
+        </div>
+      </div>
+      <!--/ Abstract. -->
+
+      <!-- Offline RL . -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-max-desktop">
+          <h2 class="title is-3">Offline Reinforcement Learning</h2>
+          <div class="publication-image">
+            <img src="./static/images/figure-gfp-related-works.png" alt="List of offline RL approaches"
+              style="width:60%">
+          </div>
+        </div>
+      </div>
+      <!--/ Offline RL. -->
+
+      <!-- Overview . -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-max-desktop">
+          <h2 class="title is-3">Overview of GFP</h2>
+          <div class="publication-image">
+            <img src="./static/images/figure-gfp-overview.png" alt="GFP Overview" style="width:60%">
+          </div>
+          <div class="content has-text-justified">
+            GFP consists of three main components: (i) in yellow, VaBC, a multi-step flow policy trained via weighted BC
+            using the guidance term, (ii) in green, a one-step actor distilled from the flow policy, and (iii) in gray,
+            a critic guiding action evaluation. VaBC regularizes the actor toward high-value actions from the dataset;
+            in turn, the actor shapes the flow and optimizes the critic following the actor-critic approach.
+            The different components of the figure are introduced in the paper.
+            Each drawing represents the probability distribution of actions of a policy, in a current state s, except
+            for the gray ones, where it is the value of actions in state s, according to the critic.
+          </div>
+        </div>
+      </div>
+      <!--/ Overview. -->
+
+      <!-- Results -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-max-desktop">
+          <h2 class="title is-3">Experiments across 144 tasks</h2>
+          <div class="publication-image">
+            <img src="./static/images/plots-gfp-perf-profiles.png"
+              alt="Performance profiles comparing GFP and prior works" style="width:60%">
+          </div>
+          <div class="content has-text-justified">
+            (a) Performance profiles for 50 tasks comparing GFP against a wide range of prior works, showing the
+            fraction of tasks where each algorithm achieves a score above threshold tau. (b) Performance profiles on 105
+            tasks, including more challenging ones, and carefully reevaluated prior methods. (c) Performance profiles
+            restricted to 30 noisy and explore tasks.
+          </div>
+        </div>
+      </div>
+      <!--/ Results -->
+
+
+    </div>
+  </section>
+
+</body>
+
+</html>
