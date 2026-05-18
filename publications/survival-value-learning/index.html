@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>SVL: Goal-Conditioned Reinforcement Learning as Survival Learning</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5HT3ZT6PP2"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-5HT3ZT6PP2');
+    </script>
+
+    <!-- Open Graph meta tags => for social medias -->
+    <meta property="og:site_name" content="Simple Robotics" />
+    <meta property="og:title" content="SVL: Goal-Conditioned Reinforcement Learning as Survival Learning" />
+    <meta property="og:description" content="Reframing GCRL as survival learning via time-to-goal distributions." />
+    <meta property="og:url" content="https://simple-robotics.github.io/publications/svl/" />
+    <meta property="og:image" content="./static/images/figure-svl-overview.png" />
+    <meta property="og:type" content="article" />
+    <meta property="article:section" content="Research" />
+    <meta property="article:tag" content="Reinforcement Learning" />
+    <meta property="article:tag" content="Goal-Conditioned RL" />
+    <meta property="article:tag" content="Survival Analysis" />
+    <meta property="article:author" content="https://nguimatsia.github.io/" />
+    <meta property="article:author" content="https://fabinsch.github.io/" />
+    <meta property="article:author" content="https://theotimelh.github.io/" />
+    <meta property="article:author" content="https://jcarpent.github.io" />
+
+    <link rel="icon" type="image/png" sizes="512x512" href="./static/images/favicon.png">
+
+    <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+    <script defer src="./static/js/fontawesome.all.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <link rel="stylesheet" href="./static/css/bulma.min.css">
+    <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <link rel="stylesheet" href="./static/css/index.css">
+
+</head>
+
+
+
+<body>
+    <!-- Navigation bar at the top -->
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu">
+            <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+                <a class="navbar-item" href="https://simple-robotics.github.io">
+                    <span class="icon">
+                        <i class="fas fa-home"></i>
+                    </span>
+                </a>
+
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a class="navbar-link">
+                        More Research
+                    </a>
+                    <div class="navbar-dropdown">
+                        <a class="navbar-item"
+                            href="https://simple-robotics.github.io/publications/guided-flow-policy/">
+                            Guided Flow Policy
+                        </a>
+                        <a class="navbar-item"
+                            href="https://simple-robotics.github.io/publications/simple-contact-solver/">
+                            Simple simulator
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- TITLE -->
+    <section class="hero">
+        <div class="my-first-section">
+            <div class="hero-body">
+                <div class="container is-widescreen">
+                    <div class="columns is-centered">
+                        <div class="column has-text-centered">
+                            <h1 class="title is-1 publication-title">SVL: <br> Goal-Conditioned Reinforcement Learning
+                                as Survival Learning
+                            </h1>
+
+                            <div class="column has-text-centered">
+                                <div class="publication-links">
+                                    <!-- PDF Link. -->
+                                    <span class="link-block">
+                                        <a href="./static/paper/svl.pdf"
+                                            class="external-link button is-normal is-rounded is-dark">
+                                            <span class="icon">
+                                                <i class="fas fa-file-pdf"></i>
+                                            </span>
+                                            <span>Paper</span>
+                                        </a>
+                                    </span>
+                                    <span class="link-block">
+                                        <a href="https://github.com/Simple-Robotics/hierarchical-survival-value-learning"
+                                            class="external-link button is-normal is-rounded is-dark">
+                                            <span class="icon">
+                                                <i class="fab fa-github"></i>
+                                            </span>
+                                            <span>Code</span>
+                                        </a>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="team-container">
+                                <div class="team-member">
+                                    <a href="https://nguimatsia.github.io/" target="_blank">
+                                        <img src="./static/images/authors/franki_nguimatsia.jpg"
+                                            alt="Franki Nguimatsia Tiofack" loading="lazy">
+                                        <div>Franki<br>Nguimatsia Tiofack<sup>1</sup></div>
+                                    </a>
+                                </div>
+
+                                <div class="team-member">
+                                    <a href="https://fabinsch.github.io/" target="_blank">
+                                        <img src="./static/images/authors/fabian_schramm.png" alt="Fabian Schramm"
+                                            loading="lazy">
+                                        <div>Fabian<br>Schramm<sup>1</sup></div>
+                                    </a>
+                                </div>
+
+                                <div class="team-member">
+                                    <a href="https://theotimelh.github.io/" target="_blank">
+                                        <img src="./static/images/authors/theotime_le_hellard.jpg"
+                                            alt="Theotime Le Hellard" loading="lazy">
+                                        <div>Theotime<br>Le Hellard<sup>1</sup></div>
+                                    </a>
+                                </div>
+
+                                <div class="team-member">
+                                    <a href="https://jcarpent.github.io" target="_blank">
+                                        <img src="./static/images/authors/justin_carpentier.jpg" alt="Justin Carpentier"
+                                            loading="lazy">
+                                        <div>Justin<br>Carpentier<sup>1</sup></div>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="is-size-5">
+                                <span class="author-block"><sup>1</sup>Inria and &Eacute;cole Normale Sup&eacute;rieure,
+                                    PSL Research University, Paris, France.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="section">
+        <div class="container is-max-desktop">
+            <!-- Abstract. -->
+            <div class="columns is-centered has-text-centered">
+                <div class="column is-four-fifths">
+                    <h2 class="title is-3">Abstract</h2>
+                    <div class="content has-text-justified">
+                        Standard approaches to goal-conditioned reinforcement learning (GCRL) that rely on
+                        temporal-difference learning can be unstable and sample-inefficient due to bootstrapping.
+                        While recent work has explored contrastive and supervised formulations to improve stability, we
+                        present a probabilistic alternative, called <b>Survival Value Learning (SVL)</b>, that reframes
+                        GCRL as a survival learning problem by modeling the time-to-goal from each state as a
+                        probability distribution.
+                        This structured distributional Monte Carlo perspective yields a closed-form identity that
+                        expresses the goal-conditioned value function as a discounted sum of survival probabilities,
+                        enabling value estimation via a hazard model trained via maximum likelihood on both event and
+                        right-censored trajectories.
+                        We introduce three practical value estimators, including finite-horizon truncation and two
+                        binned infinite-horizon approximations to capture long-horizon objectives.
+                        <b>Experiments on offline GCRL benchmarks show that SVL combined with hierarchical actors
+                            matches or surpasses strong hierarchical TD and Monte Carlo baselines, excelling on complex,
+                            long-horizon tasks.</b>
+                    </div>
+                </div>
+            </div>
+            <!--/ Abstract. -->
+
+            <!-- Overview . -->
+            <div class="columns is-centered has-text-centered">
+                <div class="column is-max-desktop">
+                    <h2 class="title is-3">Time-to-goal distributions in GCRL</h2>
+                    <div class="publication-image">
+                        <img src="./static/images/figure-svl-overview.png" alt="SVL Overview" style="width:90%">
+                    </div>
+                    <div class="content has-text-justified">
+                        In the general GCRL setting, the time required to reach a goal is a random variable. As
+                        illustrated in a navigation task, an agent may reach the target from the start via multiple
+                        distinct paths, resulting in a multi-modal distribution of arrival times. Traditional TD
+                        learning approaches estimate the goal-conditioned value function by backpropagating reward
+                        signals through all transitions from the goal to the state. Instead, we propose directly
+                        exploiting the arrival-time realizations: our <b>survival value learning (SVL)</b> approach
+                        models this distribution and recovers the value function
+                        \( V^\pi(s, g) \) as a discounted sum of survival probabilities. By learning a hazard model via
+                        maximum likelihood on both event and right-censored trajectories, SVL bypasses the bootstrapping
+                        instabilities of TD methods while inheriting the classical guarantees of MLE.
+                    </div>
+                </div>
+            </div>
+            <!--/ Overview. -->
+
+            <!-- Results -->
+            <div class="columns is-centered has-text-centered">
+                <div class="column is-max-desktop">
+                    <h2 class="title is-3">Hierarchical Survival Value Learning (HSVL)</h2>
+                    <div class="publication-image">
+                        <img src="./static/images/plots-svl-results.png"
+                            alt="Comparative results of SVL across OGBench tasks" style="width:100%">
+                    </div>
+                    <div class="content has-text-justified">
+                        We instantiate SVL within a hierarchical offline GCRL algorithm, <b>HSVL</b>, that extracts a
+                        hierarchical policy from the learned survival value function via advantage-weighted regression.
+                        Across the challenging OGBench benchmark (state-based and visual domains), HSVL matches or
+                        exceeds prior methods on standard tasks and delivers substantial gains on complex, long-horizon
+                        problems &mdash; reaching <b>81% success</b> on
+                        <code>humanoidmaze-giant-navigate</code> where the
+                        best hierarchical baseline (HIQL) achieves only 12%, and non-hierarchical methods fail
+                        (0&ndash;3%). On pixel-based benchmarks, HSVL achieves <b>61%</b> on
+                        <code>visual-antmaze-giant</code>, surpassing the best hierarchical (HIQL, 6%) and contrastive
+                        (CRL, 47%) baselines, and is the only method to extract meaningful signal on
+                        <code>visual-humanoidmaze-medium</code>.
+                        <br>
+                        <br>
+                        These results provide evidence that survival-based MLE mitigates the compounding bootstrap
+                        errors of TD over long horizons, offering a stable, probabilistic alternative to standard
+                        goal-conditioned value learning.
+                    </div>
+                </div>
+            </div>
+            <!--/ Results -->
+
+
+        </div>
+    </section>
+
+    <section class="section" id="BibTeX">
+        <div class="container is-max-desktop content">
+            <h2 class="title">BibTeX</h2>
+            <pre><code>@article{tiofack2026svl,
+  title={SVL: Goal-Conditioned Reinforcement Learning as Survival Learning},
+  author={Tiofack, Franki Nguimatsia and Schramm, Fabian and Hellard, Th{\'e}otime Le and Carpentier, Justin},
+  journal={arXiv preprint arXiv:2604.17551},
+  year={2026}
+}</code></pre>
+        </div>
+    </section>
+    <footer class="footer">
+        <div class="my-last-section">
+            <div class="container">
+                <div class="columns is-centered">
+                    <div class="column is-8">
+                        <div class="content">
+                            <p>
+                                This website is licensed under a <a rel="license"
+                                    href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0 Licence</a>.
+                                We thank <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a> for creating
+                                the template of this webpage.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
