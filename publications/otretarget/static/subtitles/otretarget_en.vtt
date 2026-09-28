@@ -1,0 +1,121 @@
+WEBVTT
+
+00:07.230 --> 00:09.370
+We introduce OTRetarget,
+
+00:09.410 --> 00:14.020
+a method that jointly retargets robot and object motion via optimal transport.
+
+00:14.690 --> 00:18.060
+From a human demonstration, we read the interactions off the surfaces,
+
+00:18.100 --> 00:19.900
+transport them onto the robot,
+
+00:19.940 --> 00:23.330
+and solve for robot and object poses together.
+
+00:23.870 --> 00:26.470
+Everything begins with a person moving.
+
+00:26.980 --> 00:29.250
+We start from a human demonstration.
+
+00:29.950 --> 00:32.206
+We recover the body mesh and the object poses,
+
+00:32.246 --> 00:35.650
+which gives us surfaces to work with, not just joints.
+
+00:36.800 --> 00:40.500
+So the first step is to describe the interaction with geometry,
+
+00:40.540 --> 00:42.400
+not with joints.
+
+00:43.710 --> 00:47.420
+So we sample points densely on every surface.
+
+00:47.460 --> 00:51.670
+For each point, and each surface near it, we store three things:
+
+00:51.710 --> 00:55.810
+how far it is, signed, so penetration comes out negative;
+
+00:56.350 --> 00:59.610
+where the closest point on that surface lies;
+
+00:59.650 --> 01:01.141
+and which way it faces,
+
+01:01.181 --> 01:05.030
+because distance alone can't tell you which side of a thin plate you are on.
+
+01:06.660 --> 01:09.660
+Next, we need a correspondence between the two bodies.
+
+01:09.700 --> 01:11.640
+Those triples live on the human.
+
+01:11.680 --> 01:13.728
+To use them, we need to know which part of the robot
+
+01:13.768 --> 01:16.280
+plays the role of which part of the human.
+
+01:16.320 --> 01:18.280
+Hand to hand, foot to foot.
+
+01:18.620 --> 01:21.270
+Entropic optimal transport gives us that,
+
+01:21.310 --> 01:26.180
+once, in a T-pose, for every pair of human part and robot link.
+
+01:26.460 --> 01:28.870
+Marginal constraints leave nothing behind:
+
+01:29.150 --> 01:32.930
+14% of extremal points unmatched, versus 42.
+
+01:33.950 --> 01:37.760
+The same correspondence also works between objects.
+
+01:38.780 --> 01:42.940
+Because it is purely geometric, one capture gives many.
+
+01:42.980 --> 01:46.247
+We can scale the scene, or swap the box for a ball,
+
+01:46.287 --> 01:49.480
+a torus, a beam, and keep the interaction.
+
+01:49.760 --> 01:52.390
+Then everything goes into one solver.
+
+01:52.930 --> 01:54.940
+The demonstration sets the targets.
+
+01:54.980 --> 01:57.980
+One program balances style against interaction,
+
+01:58.020 --> 02:00.060
+joint limits and non-penetration.
+
+02:00.100 --> 02:02.330
+One QP per frame, warm-started.
+
+02:02.370 --> 02:06.330
+Robot and object poses are solved together, so the object stays reachable.
+
+02:06.370 --> 02:12.440
+Against OmniRetarget, robot–object interaction goes from 28 to 87 percent,
+
+02:12.480 --> 02:15.290
+with roughly a third of the error everywhere else.
+
+02:15.330 --> 02:18.303
+These references train a whole-body tracking policy,
+
+02:18.343 --> 02:20.230
+which we run on a real G1.
